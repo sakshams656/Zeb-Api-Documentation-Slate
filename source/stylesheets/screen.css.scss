@@ -74,8 +74,9 @@ html, body {
   // This is the logo at the top of the ToC
   .logo {
     display: block;
-    max-width: 100%;
+    max-width: 90%;
     margin-bottom: $logo-margin;
+    margin: 10px;
   }
 
   &>.search {
@@ -634,4 +635,12 @@ html, body {
 
 .copy-clipboard:hover {
   opacity: 0.8;
+}
+
+.sticky-lang-tabs {
+  position: sticky;
+  top: 0;                    // Stick to top of its container
+  z-index: 999;
+  background: #2d2d2d;       // Match code panel background
+  border-bottom: 1px solid #444;
 }
