@@ -10,7 +10,7 @@ This repository contains the API documentation for ZebPay. Follow the steps belo
 ## Development/Local Setup
 To set up the documentation locally, follow these steps:
 1. Clone the repository:
-`git clone https://github.com/coindcx-official/rest-api.git`
+`git clone https://github.com/sakshams656/Zeb-Api-Documentation-Slate.git`
 
 2. Install dependencies:
 `bundle install`
