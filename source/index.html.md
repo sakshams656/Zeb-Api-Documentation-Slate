@@ -1,5 +1,5 @@
 ---
-title: API Reference
+title: ZebPay API Documentation
 
 language_tabs: # must be one of https://git.io/vQNgJ
   # - shell
@@ -135,6 +135,21 @@ The base URL for the Futures API is:
 
 Retrieves trading fee details (maker/taker) for a specific trading symbol.
 
+```python
+import requests # Install requests module first.
+
+url = "https://futuresbe.zebpay.com/api/v1/exchange/tradefee?symbol=BTCUSDT"
+response = requests.get(url)
+data = response.json()
+print(f"Symbol: {data['symbol']}, Maker Fee: {data['makerFee']}, Taker Fee: {data['takerFee']}")
+```
+
+```javascript
+fetch("https://futuresbe.zebpay.com/api/v1/exchange/tradefee?symbol=BTCUSDT")
+  .then(response => response.json())
+  .then(data => console.log(`Symbol: ${data.symbol}, Maker Fee: ${data.makerFee}, Taker Fee: ${data.takerFee}`));
+```
+
 > Response :
 
 ```json
@@ -171,6 +186,22 @@ The response follows the standard [ApiResponse](#apiresponse) structure. The `da
 - **`takerFee`** (`number`): The taker fee rate.
 
 ## Get Trade Fees (All Symbols)
+
+```python
+import requests # Install requests module first.
+
+url = "https://futuresbe.zebpay.com/api/v1/exchange/tradefees"
+response = requests.get(url)
+data = response.json()
+for fee in data:
+    print(f"Symbol: {fee['symbol']}, Maker Fee: {fee['makerFee']}, Taker Fee: {fee['takerFee']}")
+```
+
+```javascript
+fetch("https://futuresbe.zebpay.com/api/v1/exchange/tradefees")
+  .then(response => response.json())
+  .then(data => data.forEach(fee => console.log(`Symbol: ${fee.symbol}, Maker Fee: ${fee.makerFee}, Taker Fee: ${fee.takerFee}`)));
+```
 
 > Response :
 
@@ -215,6 +246,24 @@ The response follows the standard [ApiResponse](#apiresponse) structure. The `da
 - **`takerFee`** (`number`): The taker fee rate.
 
 ## Get Exchange Info
+
+```python
+import requests # Install requests module first.
+
+url = "https://futuresbe.zebpay.com/api/v1/exchange/exchangeInfo"
+response = requests.get(url)
+data = response.json()
+for pair in data['pairs']:
+    print(f"Pair: {pair['pair']}, Maker Fee: {pair['makerFee']}, Taker Fee: {pair['takerFee']}, Max Leverage: {pair['maxLeverage']}")
+```
+
+```javascript
+fetch("https://futuresbe.zebpay.com/api/v1/exchange/exchangeInfo")
+  .then(response => response.json())
+  .then(data => data.pairs.forEach(pair => 
+    console.log(`Pair: ${pair.pair}, Maker Fee: ${pair.makerFee}, Taker Fee: ${pair.takerFee}, Max Leverage: ${pair.maxLeverage}`)
+  ));
+```
 
 > Response : 
 
@@ -279,6 +328,24 @@ Represents detailed exchange configuration, returned within the `data` field of 
 
 Retrieves information about all available trading pairs, including status, assets, and icons.
 
+```python
+import requests # Install requests module first.
+
+url = "https://futuresbe.zebpay.com/api/v1/exchange/pairs"
+response = requests.get(url)
+data = response.json()
+for pair in data['pairs']:
+    print(f"Pair: {pair['pair']}, Name: {pair['name']}, Active: {pair['isActive']}, Icon: {pair['iconURL']}")
+```
+
+```javascript
+fetch("https://futuresbe.zebpay.com/api/v1/exchange/pairs")
+  .then(response => response.json())
+  .then(data => data.pairs.forEach(pair => 
+    console.log(`Pair: ${pair.pair}, Name: ${pair.name}, Active: ${pair.isActive}, Icon: ${pair.iconURL}`)
+  ));
+```
+
 > Response :
 
 ```json
@@ -337,6 +404,24 @@ Represents high-level metadata about all supported trading pairs, returned withi
 ## Fetch Markets
 
 Retrieves details about all available trading symbols (markets), including their status, precision, fees, and leverage limits.
+
+```python
+import requests # Install requests module first.
+
+url = "https://futuresbe.zebpay.com/api/v1/market/markets"
+response = requests.get(url)
+data = response.json()
+for symbol in data["symbols"]:
+    print(f"Symbol: {symbol['symbol']}, Status: {symbol['status']}, Maker Fee: {symbol['makerFee']}, Taker Fee: {symbol['takerFee']}, Max Leverage: {symbol['maxLeverage']}")
+```
+
+```javascript
+fetch("https://futuresbe.zebpay.com/api/v1/market/markets")
+  .then(response => response.json())
+  .then(data => data.symbols.forEach(symbol => 
+    console.log(`Symbol: ${symbol.symbol}, Status: ${symbol.status}, Maker Fee: ${symbol.makerFee}, Taker Fee: ${symbol.takerFee}, Max Leverage: ${symbol.maxLeverage}`)
+  ));
+```
 
 > Response :
 
@@ -421,6 +506,19 @@ Represents the structure of the `data` field returned by `GET /api/v1/market/mar
 
 Retrieves the current order book (bids and asks) for a specific trading symbol.
 
+```python
+import requests # Install requests module first.
+url = "https://futuresbe.zebpay.com/api/v1/market/orderBook?symbol=BTCUSDT"
+response = requests.get(url).json()
+print(f"Bids: {len(response['bids'])}, Asks: {len(response['asks'])}")
+```
+
+```javascript
+fetch("https://futuresbe.zebpay.com/api/v1/market/orderBook?symbol=BTCUSDT")
+  .then(res => res.json())
+  .then(data => console.log(`Bids: ${data.bids.length}, Asks: ${data.asks.length}`));
+```
+
 > Response :
 
 ```json
@@ -478,6 +576,19 @@ Represents the market depth for a trading pair, returned within the `data` field
 ## Get 24hr Ticker
 
 Retrieves price change statistics for a specific trading symbol over the last 24 hours.
+
+```python
+import requests 
+url = "https://futuresbe.zebpay.com/api/v1/market/ticker24Hr?symbol=BTCUSDT"
+response = requests.get(url).json()
+print(f"Last Price: {response['last']}, Change: {response['change']}")
+```
+
+```javascript
+fetch("https://futuresbe.zebpay.com/api/v1/market/ticker24Hr?symbol=BTCUSDT")
+  .then(res => res.json())
+  .then(data => console.log(`Last Price: ${data.last}, Change: ${data.change}`));
+```
 
 > Response :
 
@@ -586,6 +697,21 @@ Represents 24-hour market statistics for a trading pair, returned within the `da
 
 Retrieves high-level market information, potentially including metrics for multiple symbols.
 
+```python
+import requests
+url = "https://futuresbe.zebpay.com/api/v1/market/marketInfo"
+response = requests.get(url).json()
+for symbol, info in response.items():
+    print(f"{symbol}: Last Price - {info['lastPrice']}")
+```
+
+```javascript
+fetch("https://futuresbe.zebpay.com/api/v1/market/marketInfo")
+  .then(res => res.json())
+  .then(data => Object.entries(data).forEach(([symbol, info]) => 
+    console.log(`${symbol}: Last Price - ${info.lastPrice}`)));
+```
+
 > Response : 
 
 ```json
@@ -639,6 +765,19 @@ Represents high-level market information for a trading pair, potentially returne
 ## Get Aggregate Trades
 
 Retrieves recent aggregate trades for a specific trading symbol.
+
+```python
+import requests
+url = "https://futuresbe.zebpay.com/api/v1/market/aggTrade?symbol=BTCUSDT"
+response = requests.get(url).json()
+print(f"Trades: {len(response)}")
+```
+
+```javascript
+fetch("https://futuresbe.zebpay.com/api/v1/market/aggTrade?symbol=BTCUSDT")
+  .then(res => res.json())
+  .then(data => console.log(`Trades: ${data.length}`));
+```
 
 > Response :
 
@@ -696,6 +835,19 @@ Represents combined trades at the same price level, returned as an array within 
 
 Retrieves the current API server time. Useful for synchronizing clocks or validating timestamps in client applications.
 
+```python
+import requests
+url = "https://futuresbe.zebpay.com/api/v1/system/time"
+response = requests.get(url).json()
+print(f"Timestamp: {response['timestamp']}")
+```
+
+```javascript
+fetch("https://futuresbe.zebpay.com/api/v1/system/time")
+  .then(res => res.json())
+  .then(data => console.log(`Timestamp: ${data.timestamp}`));
+```
+
 > Response :
 
 ```json
@@ -728,6 +880,20 @@ The response follows the standard [ApiResponse](#apiresponse) structure. The `da
 ## Get System Status
 
 Checks the operational status of the API system.
+
+```python
+import requests 
+
+url = "https://futuresbe.zebpay.com/api/v1/system/status"
+response = requests.get(url).json()
+print(f"Status: {response['status']}")
+```
+
+```javascript
+fetch("https://futuresbe.zebpay.com/api/v1/system/status")
+  .then(res => res.json())
+  .then(data => console.log(`Status: ${data.status}`));
+```
 
 > Response :
 
@@ -770,6 +936,19 @@ The base URL for the Spot API is:
 ## Get All Tickers
 Get 24-hour price and volume statistics for all trading pairs.
 
+```python
+import requests
+url = "https://api.zebpay.com/api/v2/market/allTickers"
+response = requests.get(url).json()
+print(f"Number of tickers: {len(response)}")
+```
+
+```javascript
+fetch("https://api.zebpay.com/api/v2/market/allTickers")
+  .then(res => res.json())
+  .then(data => console.log(`Number of tickers: ${data.length}`));
+```
+
 > Response : 
 
 ```json
@@ -796,6 +975,19 @@ Get 24-hour price and volume statistics for all trading pairs.
 
 ## Get Ticker
 Get 24-hour price and volume statistics for a specific trading pair.
+
+```python
+import requests
+url = "https://api.zebpay.com/api/v2/market/ticker?symbol=BTC-INR"
+response = requests.get(url).json()
+print(f"Symbol: {response['symbol']}, Last Price: {response['last']}")
+```
+
+```javascript
+fetch("https://api.zebpay.com/api/v2/market/ticker?symbol=BTC-INR")
+  .then(res => res.json())
+  .then(data => console.log(`Symbol: ${data.symbol}, Last Price: ${data.last}`));
+```
 
 > Response :
 
@@ -828,6 +1020,19 @@ Get 24-hour price and volume statistics for a specific trading pair.
 ## Get Order Book
 Get the current order book for a trading pair.
 
+```python
+import requests
+url = "https://api.zebpay.com/api/v2/market/orderbook?symbol=BTC-INR"
+response = requests.get(url).json()
+print(f"Bids: {len(response['bids'])}, Asks: {len(response['asks'])}")
+```
+
+```javascript
+fetch("https://api.zebpay.com/api/v2/market/orderbook?symbol=BTC-INR")
+  .then(res => res.json())
+  .then(data => console.log(`Bids: ${data.bids.length}, Asks: ${data.asks.length}`));
+```
+
 > Response :
 
 ```json
@@ -856,6 +1061,19 @@ Get the current order book for a trading pair.
 ## Get Order Book Ticker
 Get the best bid/ask price and quantity for a trading pair.
 
+```python
+import requests
+url = "https://api.zebpay.com/api/v2/market/orderbook/ticker?symbol=BTC-INR"
+response = requests.get(url).json()
+print(f"Bid: {response['bidPrice']}, Ask: {response['askPrice']}")
+```
+
+```javascript
+fetch("https://api.zebpay.com/api/v2/market/orderbook/ticker?symbol=BTC-INR")
+  .then(res => res.json())
+  .then(data => console.log(`Bid: ${data.bidPrice}, Ask: ${data.askPrice}`));
+```
+
 > Response :
 
 ```json
@@ -879,6 +1097,19 @@ Get the best bid/ask price and quantity for a trading pair.
 
 ## Get Recent Trades
 Get recent trades for a trading pair.
+
+```python
+import requests
+url = "https://api.zebpay.com/api/v2/market/trades?symbol=BTC-INR"
+response = requests.get(url).json()
+print(f"Number of trades: {len(response)}")
+```
+
+```javascript
+fetch("https://api.zebpay.com/api/v2/market/trades?symbol=BTC-INR")
+  .then(res => res.json())
+  .then(data => console.log(`Number of trades: ${data.length}`));
+```
 
 > Response :
 
@@ -907,6 +1138,19 @@ Get recent trades for a trading pair.
 
 ## Get Klines/Candlesticks
 Get historical klines/candlesticks for a trading pair.
+
+```python
+import requests
+url = "https://api.zebpay.com/api/v2/market/klines?symbol=BTC-INR&interval=1d"
+response = requests.get(url).json()
+print(f"Number of klines: {len(response)}")
+```
+
+```javascript
+fetch("https://api.zebpay.com/api/v2/market/klines?symbol=BTC-INR&interval=1d")
+  .then(res => res.json())
+  .then(data => console.log(`Number of klines: ${data.length}`));
+```
 
 > Response : 
 
@@ -943,6 +1187,19 @@ Get historical klines/candlesticks for a trading pair.
 ## Get Service Status
 Get the current system status.
 
+```python
+import requests
+url = "https://api.zebpay.com/api/v2/status"
+response = requests.get(url).json()
+print(f"Status: {response['status']}")
+```
+
+```javascript
+fetch("https://api.zebpay.com/api/v2/status")
+  .then(res => res.json())
+  .then(data => console.log(`Status: ${data.status}`));
+```
+
 > Response :
 
 ```json
@@ -958,6 +1215,19 @@ Get the current system status.
 ## Get Server Time
 Get the current server time.
 
+```python
+import requests
+url = "https://api.zebpay.com/api/v2/time"
+response = requests.get(url).json()
+print(f"Server Time: {response['time']}")
+```
+
+```javascript
+fetch("https://api.zebpay.com/api/v2/time")
+  .then(res => res.json())
+  .then(data => console.log(`Server Time: ${data.time}`));
+```
+
 > Response :
 
 ```json
@@ -971,6 +1241,19 @@ Get the current server time.
 
 ## Get Trading Pairs
 Get information about all available trading pairs.
+
+```python
+import requests
+url = "https://api.zebpay.com/api/v2/ex/tradepairs"
+response = requests.get(url).json()
+print(f"Number of trading pairs: {len(response['data']['tradePairs'])}")
+```
+
+```javascript
+fetch("https://api.zebpay.com/api/v2/ex/tradepairs")
+  .then(res => res.json())
+  .then(data => console.log(`Number of trading pairs: ${data.data.tradePairs.length}`));
+```
 
 > Response :
 
@@ -1005,6 +1288,19 @@ Get information about all available trading pairs.
 
 ## Get Coin Settings
 Get information about all available currencies.
+
+```python
+import requests
+url = "https://api.zebpay.com/api/v2/ex/currencies"
+response = requests.get(url).json()
+print(f"Number of currencies: {len(response['data'])}")
+```
+
+```javascript
+fetch("https://api.zebpay.com/api/v2/ex/currencies")
+  .then(res => res.json())
+  .then(data => console.log(`Number of currencies: ${data.data.length}`));
+```
 
 > Response : 
 
@@ -1049,39 +1345,7 @@ Get information about all available currencies.
 
 To access private endpoints—such as those related to account balances, order management, or trading—you must authenticate your requests. Public endpoints (like order book, tickers, and exchange info) do **not** require authentication.
 
-This API supports two authentication methods:
-
-1. **JWT (JSON Web Token)**
-2. **API Key + Secret Key**
-
-You may authenticate requests using either method, depending on your application setup.
-
-## 1. JWT Authentication
-
-JWTs are self-contained tokens that securely represent a user or session.
-
-```http
-Authorization: Bearer <your_jwt_token>
-```
-
-> Example cURL Request :
-
-```bash
-curl -X GET 'https://api.zebapi.com/api/v1/wallet/balance' \
-  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' \
-  -H 'Accept: application/json'
-```
-
-> ✅ **Tip:** Use JWT when you're authenticating user sessions in web or mobile applications.
-
-### How It Works
-
-1. Obtain a valid JWT token (usually via login or an authentication flow).
-2. For every request to a private endpoint, attach the token to the `Authorization` header:
-
-
-
-## 2. API Key + Secret Key Authentication
+## API Key + Secret Key 
 
 This method is ideal for programmatic access or server-to-server integrations.
 
@@ -1097,23 +1361,6 @@ Each request to a private endpoint must be signed with an `HMAC-SHA256` signatur
 | `x-auth-signature`  | HMAC-SHA256 signature              |
 | `Content-Type`      | `application/json`                 |
 | `Accept`            | `application/json`                 |
-
-## Manual HTTP Authentication
-
-This section is for developers not using the sample client libraries.
-
-> 💡 **Recommendation:** Use the [Node.js Client](https://github.com/zebpay/zebpay-api-references/tree/main/futures/clients/rest-http/node/README.md) or [Python Client](https://github.com/zebpay/zebpay-api-references/tree/main/futures/clients/rest-http/python/README.md) to avoid handling these steps manually.
-
-### Manual JWT Authentication
-
-1. **Obtain JWT Token**
-2. **Add Header**
-
-```http
-Authorization: Bearer <your_jwt_token>
-```
-
-That’s it. This header must be included in all authenticated requests.
 
 ### Manual API Key + Secret Authentication
 
@@ -1215,11 +1462,110 @@ curl -X POST "https://api.zebapi.com/api/v1/trade/order" \
 
 # Futures - Private
 
-These endpoints allow users to manage orders, positions, leverage, and view trade-related history. **Authentication (JWT or API Key/Secret) is required.**
+These endpoints allow users to manage orders, positions, leverage, and view trade-related history. 
+
+<aside class="warning"> Authentication is required. </aside>
 
 ## Create Order
 
 Places a new trading order.
+
+```python
+import requests
+import json
+import time
+import hmac
+import hashlib
+
+api_key = "YOUR_API_KEY"  # Replace with actual key
+secret_key = "YOUR_SECRET_KEY"  # Replace with actual secret
+
+# 1. Generate timestamp (milliseconds)
+timestamp = int(time.time() * 1000)
+
+# 2. Prepare payload (LIMIT order example)
+payload_signed = {
+    "symbol": "BTCUSDT",
+    "amount": 0.01,
+    "side": "SELL",
+    "type": "LIMIT",
+    "price": 65000,  # Required for LIMIT orders
+    "marginAsset": "USDT",
+    "timestamp": timestamp  # Critical for signature
+}
+
+# 3. Create compact JSON string
+data_to_sign = json.dumps(payload_signed, separators=(",", ":"))
+
+# 4. Generate HMAC-SHA256 signature
+signature = hmac.new(
+    secret_key.encode("utf-8"),
+    data_to_sign.encode("utf-8"),
+    hashlib.sha256
+).hexdigest()
+
+# 5. Prepare headers
+headers_signed = {
+    "x-auth-apikey": api_key,
+    "x-auth-signature": signature,
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+}
+
+try:
+    response = requests.post(
+        "https://api.zebapi.com/api/v1/trade/order",
+        headers=headers_signed,
+        data=data_to_sign
+    )
+    print("Signed Response:", response.json())
+except Exception as e:
+    print("Signed Error:", e)
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios'); // Install with: npm install axios
+
+const apiKey = "YOUR_API_KEY";       // Replace with actual key
+const secretKey = "YOUR_SECRET_KEY"; // Replace with actual secret
+
+// 1. Generate timestamp (milliseconds)
+const timestamp = Date.now();
+
+// 2. Prepare payload (with TP/SL example)
+const signedPayload = {
+  symbol: "BTCUSDT",
+  amount: 0.02,
+  side: "BUY",
+  type: "LIMIT",
+  price: 62000,           // Required for LIMIT orders
+  marginAsset: "USDT",
+  stopLossPrice: 61500,    // Optional stop-loss
+  takeProfitPrice: 63500,  // Optional take-profit
+  timestamp: timestamp     // Must be included
+};
+
+// 3. Create compact JSON string
+const dataToSign = JSON.stringify(signedPayload);
+
+// 4. Generate HMAC-SHA256 signature
+const signature = crypto.createHmac("sha256", secretKey)
+                        .update(dataToSign)
+                        .digest("hex");
+
+// 5. Prepare headers
+const signedHeaders = {
+  "x-auth-apikey": apiKey,
+  "x-auth-signature": signature,
+  "Content-Type": "application/json",
+  "Accept": "application/json"
+};
+
+axios.post("https://api.zebapi.com/api/v1/trade/order", dataToSign, { headers: signedHeaders })
+  .then(response => console.log("Signed Response:", response.data))
+  .catch(error => console.error("Signed Error:", error.response?.data));
+```
 
 > Response :
 
@@ -1275,9 +1621,107 @@ The response follows the standard [ApiResponse](#apiresponse) structure. The `da
 
 Response from `POST /api/v1/trade/order`. This structure is also used as the base for responses when adding TP/SL or closing positions.
 
-* **Structure:** Generally inherits fields from the [Order](#order) model, representing the details of the newly created order. Key fields typically include `clientOrderId`, `timestamp`, `symbol`, `type`, `side`, `price`, `amount`, `status`, etc.
+### Structure: 
+
+Generally inherits fields from the [Order](#order) model, representing the details of the newly created order. Key fields typically include `clientOrderId`, `timestamp`, `symbol`, `type`, `side`, `price`, `amount`, `status`, etc.
 
 ## Cancel Order
+
+```python
+import time
+import hmac
+import hashlib
+import requests
+import json
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/trade/order'
+
+# Prepare the request body with required parameters
+body = {
+    'clientOrderId': 'myLimitOrder456',
+    'symbol': 'BTCUSDT'  # optional
+}
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+body['timestamp'] = timestamp
+
+# Serialize body to a compact JSON string (no extra whitespace)
+data_to_sign = json.dumps(body, separators=(',', ':'))
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+}
+
+# Send the DELETE request
+response = requests.delete(url, headers=headers, json=body)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/trade/order';
+
+// Prepare the request body with required parameters
+const body = {
+    clientOrderId: 'myLimitOrder456',
+    symbol: 'BTCUSDT'  // optional
+};
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+body.timestamp = timestamp;
+
+// Serialize body to a compact JSON string
+const dataToSign = JSON.stringify(body);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+};
+
+// Send the DELETE request
+axios.delete(url, { headers: headers, data: body })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
 
 > Response :
 
@@ -1307,7 +1751,7 @@ Cancels an existing open order.
 | **Query Params** | None                        |
 | **Request Body** | (object, required) See below |
 
-**Request Body Parameters:**
+### Request Body Parameters:
 
 -   **`clientOrderId`** (`string`, required): The client-generated ID of the order to cancel .
 -   `symbol` (`string`, optional): Trading symbol .
@@ -1336,6 +1780,99 @@ Response from `DELETE /api/v1/trade/order`. This has a unique structure.
 ## Get Order Details
 
 Fetches details of a specific order using its client order ID.
+
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/trade/order'
+
+# Prepare query parameters
+params = {
+    'id': 'myLimitOrder456'
+}
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+params['timestamp'] = timestamp
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the GET request
+response = requests.get(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/trade/order';
+
+// Prepare query parameters
+const params = {
+    id: 'myLimitOrder456'
+};
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+params.timestamp = timestamp;
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the GET request
+axios.get(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
 
 > Response :
 
@@ -1382,6 +1919,110 @@ The response follows the standard [ApiResponse](#apiresponse) structure. The `da
 ## Add TP/SL to Position
 
 Adds Take Profit (TP) and/or Stop Loss (SL) orders to an existing position.
+
+```python
+import time
+import hmac
+import hashlib
+import requests
+import json
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/trade/order/addTPSL'
+
+# Prepare the request body with required parameters
+body = {
+    'positionId': 'pos123',
+    'amount': 0.05,
+    'side': 'SELL',
+    'symbol': 'BTCUSDT',  # optional
+    'stopLossPrice': 60000.00,  # at least one of stopLossPrice or takeProfitPrice required
+    'takeProfitPrice': 70000.00
+}
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+body['timestamp'] = timestamp
+
+# Serialize body to a compact JSON string (no extra whitespace)
+data_to_sign = json.dumps(body, separators=(',', ':'))
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+}
+
+# Send the POST request
+response = requests.post(url, headers=headers, json=body)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/trade/order/addTPSL';
+
+// Prepare the request body with required parameters
+const body = {
+    positionId: 'pos123',
+    amount: 0.05,
+    side: 'SELL',
+    symbol: 'BTCUSDT',  // optional
+    stopLossPrice: 60000.00,  // at least one of stopLossPrice or takeProfitPrice required
+    takeProfitPrice: 70000.00
+};
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+body.timestamp = timestamp;
+
+// Serialize body to a compact JSON string
+const dataToSign = JSON.stringify(body);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+};
+
+// Send the POST request
+axios.post(url, body, { headers: headers })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
 
 > Response :
 
@@ -1440,6 +2081,104 @@ Response from `POST /api/v1/trade/order/addTPSL`.
 ## Add Margin to Position
 
 Adds margin to an existing isolated margin position.
+
+```python
+import time
+import hmac
+import hashlib
+import requests
+import json
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/trade/addMargin'
+
+# Prepare the request body with required parameters
+body = {
+    'positionId': 'pos123',
+    'amount': 100.0,
+    'symbol': 'BTCUSDT'  # optional
+}
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+body['timestamp'] = timestamp
+
+# Serialize body to a compact JSON string (no extra whitespace)
+data_to_sign = json.dumps(body, separators=(',', ':'))
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+}
+
+# Send the POST request
+response = requests.post(url, headers=headers, json=body)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/trade/addMargin';
+
+// Prepare the request body with required parameters
+const body = {
+    positionId: 'pos123',
+    amount: 100.0,
+    symbol: 'BTCUSDT'  // optional
+};
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+body.timestamp = timestamp;
+
+// Serialize body to a compact JSON string
+const dataToSign = JSON.stringify(body);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+};
+
+// Send the POST request
+axios.post(url, body, { headers: headers })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
 
 > Response :
 
@@ -1503,6 +2242,104 @@ Response from `POST /api/v1/trade/addMargin` and `POST /api/v1/trade/reduceMargi
 
 Reduces margin from an existing isolated margin position.
 
+```python
+import time
+import hmac
+import hashlib
+import requests
+import json
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/trade/reduceMargin'
+
+# Prepare the request body with required parameters
+body = {
+    'positionId': 'pos123',
+    'amount': 50.0,
+    'symbol': 'BTCUSDT'  # optional
+}
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+body['timestamp'] = timestamp
+
+# Serialize body to a compact JSON string (no extra whitespace)
+data_to_sign = json.dumps(body, separators=(',', ':'))
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+}
+
+# Send the POST request
+response = requests.post(url, headers=headers, json=body)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/trade/reduceMargin';
+
+// Prepare the request body with required parameters
+const body = {
+    positionId: 'pos123',
+    amount: 50.0,
+    symbol: 'BTCUSDT'  // optional
+};
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+body.timestamp = timestamp;
+
+// Serialize body to a compact JSON string
+const dataToSign = JSON.stringify(body);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+};
+
+// Send the POST request
+axios.post(url, body, { headers: headers })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
+
 > Response : 
 
 ```json
@@ -1551,6 +2388,102 @@ The response follows the standard [ApiResponse](#apiresponse) structure. The `da
 ## Close Position
 
 Closes an existing open position using a market order.
+
+```python
+import time
+import hmac
+import hashlib
+import requests
+import json
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/trade/position/close'
+
+# Prepare the request body with required parameters
+body = {
+    'positionId': 'pos123',
+    'symbol': 'BTCUSDT'  # optional
+}
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+body['timestamp'] = timestamp
+
+# Serialize body to a compact JSON string (no extra whitespace)
+data_to_sign = json.dumps(body, separators=(',', ':'))
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+}
+
+# Send the POST request
+response = requests.post(url, headers=headers, json=body)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/trade/position/close';
+
+// Prepare the request body with required parameters
+const body = {
+    positionId: 'pos123',
+    symbol: 'BTCUSDT'  // optional
+};
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+body.timestamp = timestamp;
+
+// Serialize body to a compact JSON string
+const dataToSign = JSON.stringify(body);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+};
+
+// Send the POST request
+axios.post(url, body, { headers: headers })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
 
 > Response :
 
@@ -1605,6 +2538,103 @@ Response from `POST /api/v1/trade/position/close`.
 ## Get Open Orders
 
 Retrieves a list of the user's currently open orders, optionally filtered by symbol.
+
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/trade/order/open-orders'
+
+# Prepare query parameters
+params = {
+    'symbol': 'BTCUSDT',
+    'limit': 10,  # optional
+    'since': 1712345678901  # optional
+}
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+params['timestamp'] = timestamp
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the GET request
+response = requests.get(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/trade/order/open-orders';
+
+// Prepare query parameters
+const params = {
+    symbol: 'BTCUSDT',
+    limit: 10,  // optional
+    since: 1712345678901  // optional
+};
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+params.timestamp = timestamp;
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the GET request
+axios.get(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
 
 > Response
 
@@ -1675,6 +2705,101 @@ Response from `GET /api/v1/trade/order/open-orders` and `GET /api/v1/trade/order
 ## Get Positions
 
 Retrieves a list of the user's current positions, optionally filtered by symbols or status.
+
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/trade/positions'
+
+# Prepare query parameters
+params = {
+    'symbols': ['BTCUSDT', 'ETHUSDT'],  # optional
+    'status': 'OPEN'  # optional
+}
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+params['timestamp'] = timestamp
+
+# Build the query string for signing (doseq=True for array parameters)
+data_to_sign = urlencode(params, doseq=True)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the GET request
+response = requests.get(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/trade/positions';
+
+// Prepare query parameters
+const params = {
+    symbols: ['BTCUSDT', 'ETHUSDT'],  // optional
+    status: 'OPEN'  // optional
+};
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+params.timestamp = timestamp;
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the GET request
+axios.get(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
 
 > Response :
 
@@ -1749,6 +2874,99 @@ Represents a futures trading position, returned within arrays from `GET /api/v1/
 
 Retrieves the user's leverage setting for a specific trading symbol.
 
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/trade/userLeverage'
+
+# Prepare query parameters
+params = {
+    'symbol': 'BTCUSDT'
+}
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+params['timestamp'] = timestamp
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the GET request
+response = requests.get(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/trade/userLeverage';
+
+// Prepare query parameters
+const params = {
+    symbol: 'BTCUSDT'
+};
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+params.timestamp = timestamp;
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the GET request
+axios.get(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
+
 > Response :
 
 ```json
@@ -1801,6 +3019,91 @@ Represents user leverage settings for a trading pair, returned by leverage-relat
 
 Retrieves the user's leverage settings for all symbols.
 
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/trade/userLeverages'
+
+# Prepare query parameters (only timestamp required for auth)
+params = {
+    'timestamp': int(time.time() * 1000)
+}
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the GET request
+response = requests.get(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/trade/userLeverages';
+
+// Prepare query parameters (only timestamp required for auth)
+const params = {
+    timestamp: Date.now()
+};
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the GET request
+axios.get(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
+
 > Response :
 
 ```json
@@ -1847,6 +3150,102 @@ The response follows the standard [ApiResponse](#apiresponse) structure. The `da
 
 Updates the user's leverage setting for a specific symbol.
 
+```python
+import time
+import hmac
+import hashlib
+import requests
+import json
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/trade/update/userLeverage'
+
+# Prepare the request body with required parameters
+body = {
+    'symbol': 'BTCUSDT',
+    'leverage': 25
+}
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+body['timestamp'] = timestamp
+
+# Serialize body to a compact JSON string (no extra whitespace)
+data_to_sign = json.dumps(body, separators=(',', ':'))
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+}
+
+# Send the POST request
+response = requests.post(url, headers=headers, json=body)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/trade/update/userLeverage';
+
+// Prepare the request body with required parameters
+const body = {
+    symbol: 'BTCUSDT',
+    leverage: 25
+};
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+body.timestamp = timestamp;
+
+// Serialize body to a compact JSON string
+const dataToSign = JSON.stringify(body);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+};
+
+// Send the POST request
+axios.post(url, body, { headers: headers })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
+
 > Response :
 
 ```json
@@ -1892,6 +3291,101 @@ The response follows the standard [ApiResponse](#apiresponse) structure. The `da
 ## Get Order History
 
 Retrieves the user's historical orders with pagination.
+
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/trade/order/history'
+
+# Prepare query parameters
+params = {
+    'pageSize': 20,  # optional
+    'timestamp': 1712345678901  # optional
+}
+
+# Generate current timestamp in milliseconds for auth
+timestamp = int(time.time() * 1000)
+params['timestamp'] = timestamp  # Overwrites optional timestamp if present
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the GET request
+response = requests.get(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/trade/order/history';
+
+// Prepare query parameters
+const params = {
+    pageSize: 20,  // optional
+    timestamp: 1712345678901  // optional
+};
+
+// Generate current timestamp in milliseconds for auth
+const timestamp = Date.now();
+params.timestamp = timestamp;  // Overwrites optional timestamp if present
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the GET request
+axios.get(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
 
 > Response :
 
@@ -1960,6 +3454,101 @@ Response from `GET /api/v1/trade/order/open-orders` and `GET /api/v1/trade/order
 ## Get Trade History
 
 Retrieves the user's historical trades with pagination.
+
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/trade/history'
+
+# Prepare query parameters
+params = {
+    'pageSize': 20,  # optional
+    'timestamp': 1712345678901  # optional
+}
+
+# Generate current timestamp in milliseconds for auth
+timestamp = int(time.time() * 1000)
+params['timestamp'] = timestamp  # Overwrites optional timestamp if present
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the GET request
+response = requests.get(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/trade/history';
+
+// Prepare query parameters
+const params = {
+    pageSize: 20,  // optional
+    timestamp: 1712345678901  // optional
+};
+
+// Generate current timestamp in milliseconds for auth
+const timestamp = Date.now();
+params.timestamp = timestamp;  // Overwrites optional timestamp if present
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the GET request
+axios.get(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
 
 > Response :
 
@@ -2051,6 +3640,101 @@ Represents a completed trade execution, returned in lists from `GET /api/v1/trad
 
 Retrieves the user's historical wallet transactions (fees, funding, etc.) with pagination.
 
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/trade/transaction/history'
+
+# Prepare query parameters
+params = {
+    'pageSize': 20,  # optional
+    'timestamp': 1712345678901  # optional
+}
+
+# Generate current timestamp in milliseconds for auth
+timestamp = int(time.time() * 1000)
+params['timestamp'] = timestamp  # Overwrites optional timestamp if present
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the GET request
+response = requests.get(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/trade/transaction/history';
+
+// Prepare query parameters
+const params = {
+    pageSize: 20,  // optional
+    timestamp: 1712345678901  // optional
+};
+
+// Generate current timestamp in milliseconds for auth
+const timestamp = Date.now();
+params.timestamp = timestamp;  // Overwrites optional timestamp if present
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the GET request
+axios.get(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
+
 > Response :
 
 ```json
@@ -2141,6 +3825,91 @@ Represents a wallet transaction (e.g., fee, funding), returned in lists from `GE
 
 Retrieves the user's balances for all assets in their wallet.
 
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v1/wallet/balance'
+
+# Prepare query parameters (only timestamp required for auth)
+params = {
+    'timestamp': int(time.time() * 1000)
+}
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the GET request
+response = requests.get(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v1/wallet/balance';
+
+// Prepare query parameters (only timestamp required for auth)
+const params = {
+    timestamp: Date.now()
+};
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the GET request
+axios.get(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
+
 > Response :
 
 ```json
@@ -2203,6 +3972,97 @@ Represents the balance for a single asset, used within the `WalletBalance` objec
 ## Get Account Balance
 Get the balance for specific assets or all assets.
 
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v2/account/balance'
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+params = {'timestamp': timestamp}
+
+# Optional: Add symbol or currencies if needed
+# params['symbol'] = 'BTC-INR'
+# params['currencies'] = 'BTC,INR'
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the GET request
+response = requests.get(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v2/account/balance';
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+const params = { timestamp: timestamp };
+
+// Optional: Add symbol or currencies if needed
+// params.symbol = 'BTC-INR';
+// params.currencies = 'BTC,INR';
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the GET request
+axios.get(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
+
 > Response :
 
 ```json
@@ -2263,6 +4123,110 @@ Get the balance for specific assets or all assets.
 
 Place a new order.
 
+```python
+import time
+import hmac
+import hashlib
+import requests
+import json
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v2/ex/orders'
+
+# Prepare the request body with required parameters
+body = {
+    'symbol': 'BTC-INR',
+    'side': 'BUY',
+    'type': 'LIMIT',
+    'price': '5333400',
+    'quantity': '0.0001'
+    # Add other optional parameters if needed
+}
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+body['timestamp'] = timestamp
+
+# Serialize body to a compact JSON string (no extra whitespace)
+data_to_sign = json.dumps(body, separators=(',', ':'))
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+}
+
+# Send the POST request
+response = requests.post(url, headers=headers, json=body)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v2/ex/orders';
+
+// Prepare the request body with required parameters
+const body = {
+    symbol: 'BTC-INR',
+    side: 'BUY',
+    type: 'LIMIT',
+    price: '5333400',
+    quantity: '0.0001'
+    // Add other optional parameters if needed
+};
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+body.timestamp = timestamp;
+
+// Serialize body to a compact JSON string
+const dataToSign = JSON.stringify(body);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+};
+
+// Send the POST request
+axios.post(url, body, { headers: headers })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
+
 > Response :
 
 ```json
@@ -2310,6 +4274,105 @@ Place a new order.
 ## Get Orders
 
 Get orders with optional filtering.
+
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v2/ex/orders'
+
+# Prepare query parameters
+params = {
+    'symbol': 'BTC-INR',
+    'status': 'ACTIVE',  # optional
+    'currentPage': 1,    # optional
+    'pageSize': 20       # optional
+}
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+params['timestamp'] = timestamp
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the GET request
+response = requests.get(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v2/ex/orders';
+
+// Prepare query parameters
+const params = {
+    symbol: 'BTC-INR',
+    status: 'ACTIVE',  // optional
+    currentPage: 1,    // optional
+    pageSize: 20       // optional
+};
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+params.timestamp = timestamp;
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the GET request
+axios.get(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
 
 > Response :
 
@@ -2375,6 +4438,95 @@ Get orders with optional filtering.
 ## Get Order Details
 Get details of a specific order.
 
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Order ID to fetch
+order_id = '5784098'
+
+# Endpoint URL with order ID
+url = f'https://api.zebapi.com/api/v2/ex/orders/{order_id}'
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+params = {'timestamp': timestamp}
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the GET request
+response = requests.get(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Order ID to fetch
+const orderId = '5784098';
+
+// Endpoint URL with order ID
+const url = `https://api.zebapi.com/api/v2/ex/orders/${orderId}`;
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+const params = { timestamp: timestamp };
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the GET request
+axios.get(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
+
 > Response :
 
 ```json
@@ -2420,6 +4572,95 @@ Get details of a specific order.
 ## Cancel Order
 Cancel a specific order.
 
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Order ID to cancel
+order_id = '6016691'
+
+# Endpoint URL with order ID
+url = f'https://api.zebapi.com/api/v2/ex/orders/{order_id}'
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+params = {'timestamp': timestamp}
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the DELETE request
+response = requests.delete(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Order ID to cancel
+const orderId = '6016691';
+
+// Endpoint URL with order ID
+const url = `https://api.zebapi.com/api/v2/ex/orders/${orderId}`;
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+const params = { timestamp: timestamp };
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the DELETE request
+axios.delete(url, { glutamateheaders: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
+
 > Response :
 
 ```json
@@ -2448,6 +4689,99 @@ Cancel a specific order.
 
 ## Cancel All Orders for a symbol
 Cancel all orders for a trading pair.
+
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v2/ex/orders'
+
+# Prepare query parameters
+params = {
+    'symbol': 'BTC-INR'
+}
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+params['timestamp'] = timestamp
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the DELETE request
+response = requests.delete(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v2/ex/orders';
+
+// Prepare query parameters
+const params = {
+    symbol: 'BTC-INR'
+};
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+params.timestamp = timestamp;
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the DELETE request
+axios.delete(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
 
 > Response :
 
@@ -2481,6 +4815,89 @@ Cancel all orders for a trading pair.
 
 Cancel all orders
 
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Endpoint URL
+url = 'https://api.zebapi.com/api/v2/ex/cancelAll'
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+params = {'timestamp': timestamp}
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the DELETE request
+response = requests.delete(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Endpoint URL
+const url = 'https://api.zebapi.com/api/v2/ex/cancelAll';
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+const params = { timestamp: timestamp };
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the DELETE request
+axios.delete(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
+
 > Response :
 
 ```json
@@ -2505,6 +4922,95 @@ Cancel all orders
 
 ## Get Order Fills
 Get fills for a specific order.
+
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Order ID to fetch fills for
+order_id = '660529'
+
+# Endpoint URL with order ID
+url = f'https://api.zebapi.com/api/v2/ex/orders/fills/{order_id}'
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+params = {'timestamp': timestamp}
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the GET request
+response = requests.get(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Order ID to fetch fills for
+const orderId = '660529';
+
+// Endpoint URL with order ID
+const url = `https://api.zebapi.com/api/v2/ex/orders/fills/${orderId}`;
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+const params = { timestamp: timestamp };
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the GET request
+axios.get(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
 
 > Response:
 
@@ -2566,6 +5072,105 @@ Get fills for a specific order.
 ## Get Exchange fee
 Get Exchange fee details
 
+```python
+import time
+import hmac
+import hashlib
+import requests
+from urllib.parse import urlencode
+
+# Replace with your actual API Key and Secret Key
+API_KEY = 'your_api_key_here'
+SECRET_KEY = 'your_secret_key_here'
+
+# Symbol to fetch fee for
+symbol = 'BTC-INR'
+
+# Endpoint URL with symbol
+url = f'https://api.zebapi.com/api/v2/ex/fee/{symbol}'
+
+# Prepare query parameters
+params = {
+    'side': 'BUY'  # Required parameter
+}
+
+# Generate current timestamp in milliseconds
+timestamp = int(time.time() * 1000)
+params['timestamp'] = timestamp
+
+# Build the query string for signing
+data_to_sign = urlencode(params)
+
+# Generate HMAC-SHA256 signature using Secret Key
+signature = hmac.new(
+    key=SECRET_KEY.encode('utf-8'),
+    msg=data_to_sign.encode('utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
+# Define request headers
+headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+}
+
+# Send the GET request
+response = requests.get(url, headers=headers, params=params)
+
+# Print the JSON response
+print(response.json())
+```
+
+```javascript
+const crypto = require('crypto');
+const axios = require('axios');
+const qs = require('querystring');
+
+// Replace with your actual API Key and Secret Key
+const API_KEY = 'your_api_key_here';
+const SECRET_KEY = 'your_secret_key_here';
+
+// Symbol to fetch fee for
+const symbol = 'BTC-INR';
+
+// Endpoint URL with symbol
+const url = `https://api.zebapi.com/api/v2/ex/fee/${symbol}`;
+
+// Prepare query parameters
+const params = {
+    side: 'BUY'  // Required parameter
+};
+
+// Generate current timestamp in milliseconds
+const timestamp = Date.now();
+params.timestamp = timestamp;
+
+// Build the query string for signing
+const dataToSign = qs.stringify(params);
+
+// Generate HMAC-SHA256 signature using Secret Key
+const signature = crypto.createHmac('sha256', SECRET_KEY)
+    .update(dataToSign)
+    .digest('hex');
+
+// Define request headers
+const headers = {
+    'x-auth-apikey': API_KEY,
+    'x-auth-signature': signature,
+    'Accept': 'application/json'
+};
+
+// Send the GET request
+axios.get(url, { headers: headers, params: params })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
+
 > Response :
 
 ```json
@@ -2600,4 +5205,3 @@ Get Exchange fee details
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | side | string | Yes | Order side (BUY,SELL) |
-
